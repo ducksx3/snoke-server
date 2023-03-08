@@ -2,10 +2,9 @@
 
 This repo contains the backend code for my game Snoke - a multiplayer web-clone of the classic Snake game.
 
-South African Server: https://snoke.cloud
-European Server: http://snoke.ducksx3.xyz
+Snoke can be played @ https://snoke.cloud
 
-Note that the European server will often lag behind the South African one in terms of content.
+Please note currently there is only one server, which is hosted in Europe.
 
 For more information about Snoke and its innerworkings, see the [Snokepedia](https://snoke.cloud/Snokepedia.pdf)
 

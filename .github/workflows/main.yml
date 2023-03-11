@@ -15,6 +15,7 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-          npm -i
+          npm install
+          npm audit fix
           node_modules/eslint/bin/eslint.js .
       - run: echo "🍏 This job's status is ${{ job.status }}."

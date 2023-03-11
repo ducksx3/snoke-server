@@ -10,9 +10,13 @@ module.exports = {
 }
 
 function initGame(gameRules) {
-  const state = createGameState(gameRules)
-  randomFood(state);
-  return state;
+  try {
+    const state = createGameState(gameRules)
+    randomFood(state);
+    return state;
+  } catch (error) {
+    console.error(`Instance crashed with error ${error}`)
+  }
 }
 
 function createGameState(gameRules) {

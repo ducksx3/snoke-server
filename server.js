@@ -19,7 +19,7 @@ const { Server } = require("socket.io");
 
 const FRONTEND_SERVER = process.env.FRONTEND_SERVER ? process.env.FRONTEND_SERVER:'localhost'; 
 const BACKEND_SERVER = process.env.BACKEND_SERVER ? process.env.BACKEND_SERVER:'localhost'; 
-const k8s_API = process.env.k8s_API ? process.env.k8s_API:BACKEND_SERVER; 
+const k8s_API = process.env.k8s_API ? process.env.k8s_API:BACKEND_SERVER;
 const usingK8S = process.env.usingK8S ? process.env.usingK8S:"false"; 
 const containerized = process.env.containerized ? process.env.containerized:"false"; 
 console.log(`FRONTEND_SERVER is: ${FRONTEND_SERVER}`);
@@ -77,8 +77,8 @@ const requestListener = function (req, res) {
 };
 
   options = {
-    key: readFileSync("mykey.key"),
-    cert: readFileSync("mycert.crt")
+    key: readFileSync("dummy.key"),
+    cert: readFileSync("dummy.crt")
   }
 
 // API to create games
@@ -123,26 +123,28 @@ async function getNodeIP(targetPod){
 
 
 async function handleNewGame(gameRules) {
-  gameRules = gameRules ? JSON.parse(gameRules):null;
-
-  console.log(`Received: ${gameRules}`)
-  let roomName = makeid(4);
-  console.log(roomName,": created")
-  targetPod = roomName.substring(0, roomName.lastIndexOf('x'));
-
-  // #TODO - add a timeout
-  HostIP = await getNodeIP(targetPod);
-
-  // Initializes players and food
-  state[roomName] = initGame(gameRules);
-  state[roomName].gameID = roomName;
-  // state[roomName].playerArray.push(client.id);
-
-  startGameInterval(roomName, state[roomName].GameRules.FPS);
-  GameInfo = {}
-  GameInfo.HostIP = HostIP;
-  GameInfo.roomName = roomName;
-  return GameInfo;
+  try {
+    gameRules = gameRules ? JSON.parse(gameRules):null;
+  
+    console.log(`Received: ${gameRules}`)
+    let roomName = makeid(4);
+    console.log(roomName,": created")
+    targetPod = roomName.substring(0, roomName.lastIndexOf('x'));
+  
+    // #TODO - add a timeout
+    HostIP = await getNodeIP(targetPod);
+  
+    // Initializes players and food
+    state[roomName] = initGame(gameRules);
+    state[roomName].gameID = roomName;
+    // state[roomName].playerArray.push(client.id);
+  
+    startGameInterval(roomName, state[roomName].GameRules.FPS);
+    GameInfo = {}
+    GameInfo.HostIP = HostIP;
+    GameInfo.roomName = roomName;
+    return GameInfo;
+  } catch (error) {console.error(`Creating a new game failed with: ${error}`)}
 }
 
 
